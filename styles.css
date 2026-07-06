@@ -354,27 +354,25 @@ img { max-width: 100%; display: block; }
 
 .about__visual {
   position: relative;
-  height: 320px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  height: 380px;
 }
 
 .about__blob {
   position: absolute;
   inset: 0;
   background: var(--gradient-warm);
-  border-radius: 55% 45% 45% 55% / 55% 55% 45% 45%;
-  opacity: 0.85;
+  border-radius: 32px;
+  opacity: 0.9;
 }
 
-.about__emoji {
-  position: relative;
-  font-size: 3rem;
-  background: #fff;
-  padding: 24px 32px;
+.about__photo {
+  position: absolute;
+  inset: 18px;
+  width: calc(100% - 36px);
+  height: calc(100% - 36px);
+  object-fit: cover;
   border-radius: var(--radius-lg);
-  box-shadow: var(--shadow-md);
+  box-shadow: var(--shadow-lg);
 }
 
 .about__list {
