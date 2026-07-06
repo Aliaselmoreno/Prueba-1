@@ -147,16 +147,10 @@ img { max-width: 100%; display: block; }
 .logo {
   display: flex;
   align-items: center;
-  gap: 8px;
-  font-weight: 800;
-  font-size: 1.25rem;
-  color: var(--color-ink);
   margin-right: auto;
 }
 
-.logo__icon { font-size: 1.4rem; }
-
-.logo__accent { color: var(--color-primary-dark); }
+.logo__img { height: 42px; width: auto; }
 
 .nav {
   display: flex;
@@ -632,8 +626,16 @@ img { max-width: 100%; display: block; }
   border-bottom: 1px solid rgba(255,255,255,0.1);
 }
 
-.footer__brand { display: flex; flex-direction: column; gap: 10px; }
-.footer__brand .logo { color: #fff; }
+.footer__brand { display: flex; flex-direction: column; gap: 14px; }
+
+.footer__logo-badge {
+  display: inline-flex;
+  width: fit-content;
+  background: #fff;
+  border-radius: 12px;
+  padding: 10px 16px;
+}
+
 .footer__brand p { color: #94a3b8; font-size: 0.9rem; max-width: 280px; }
 
 .footer__col { display: flex; flex-direction: column; gap: 12px; }
