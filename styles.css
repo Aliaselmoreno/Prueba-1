@@ -643,7 +643,22 @@ img { max-width: 100%; display: block; }
 .footer__col a { color: #94a3b8; }
 .footer__col a:hover { color: #fff; }
 
-.footer__social { display: flex; gap: 12px; font-size: 1.3rem; }
+.footer__social { display: flex; gap: 12px; }
+
+.social-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background: #fff;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.social-icon svg { width: 18px; height: 18px; }
+
+.social-icon:hover { transform: translateY(-3px); box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25); }
 
 .footer__bottom {
   text-align: center;
@@ -665,11 +680,12 @@ img { max-width: 100%; display: block; }
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 1.7rem;
   box-shadow: 0 12px 28px rgba(37, 211, 102, 0.45);
   z-index: 200;
   transition: transform 0.2s ease;
 }
+
+.whatsapp-fab svg { width: 28px; height: 28px; }
 
 .whatsapp-fab:hover { transform: scale(1.08); }
 
