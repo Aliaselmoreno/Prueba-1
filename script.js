@@ -22,8 +22,11 @@ window.addEventListener('scroll', () => {
   header.style.boxShadow = window.scrollY > 10 ? '0 4px 20px rgba(15,23,42,0.08)' : 'none';
 });
 
-// Contact form -> sends the request straight to WhatsApp with a prefilled message
-const WHATSAPP_NUMBER = '34600000000'; // TODO: replace with the real number, digits only, country code first
+// Contact form -> sends the request straight to WhatsApp with a prefilled message.
+// Routed to the business WhatsApp for office/community services, particulares otherwise.
+const WHATSAPP_PARTICULARES = '34635421689';
+const WHATSAPP_EMPRESAS = '34611892866';
+const EMPRESA_SERVICIOS = ['oficina', 'comunidad'];
 
 const form = document.getElementById('contactForm');
 const status = document.getElementById('formStatus');
@@ -38,6 +41,8 @@ form.addEventListener('submit', (event) => {
   const servicio = data.get('servicio');
   const mensaje = data.get('mensaje');
 
+  const whatsappNumber = EMPRESA_SERVICIOS.includes(servicio) ? WHATSAPP_EMPRESAS : WHATSAPP_PARTICULARES;
+
   const text =
     `Hola Salva Limpieza, soy ${nombre}.%0A` +
     `Teléfono: ${telefono}%0A` +
@@ -45,7 +50,7 @@ form.addEventListener('submit', (event) => {
     `Servicio: ${servicio}%0A` +
     `Mensaje: ${mensaje || '-'}`;
 
-  window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${text}`, '_blank');
+  window.open(`https://wa.me/${whatsappNumber}?text=${text}`, '_blank');
 
   status.textContent = 'Te hemos redirigido a WhatsApp para confirmar tu solicitud.';
   form.reset();
