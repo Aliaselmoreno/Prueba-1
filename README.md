@@ -25,8 +25,8 @@ Las imágenes actuales son **marcadores de posición** (archivos SVG). Para usar
 
 **Actividades:** carpeta `images/actividades/`
 
-- ✅ Ya con foto real: `yoga.jpg`, `taekwondo.jpg`, `aerobic.jpg`, `spinning.jpg`, `kickboxing.jpg`, `pilates.jpg`
-- Pendiente: `musculacion.svg` y `crosstraining.svg` → sustituir por las fotos reales
+- ✅ Ya con foto real: `yoga.jpg`, `taekwondo.jpg`, `aerobic.jpg`, `spinning.jpg`, `musculacion.jpg`, `kickboxing.jpg`, `pilates.jpg`
+- Pendiente: `crosstraining.svg` → sustituir por la foto real (la subida era un duplicado de la de yoga)
 
 > Consejo: si las fotos son `.jpg`, lo más sencillo es cambiar la extensión en los `src="images/..."` de los HTML (por ejemplo `images/tour/sala-taekwondo-1.jpg`). Las fotos se recortan automáticamente al hueco (formato 16:9 recomendado).
 
