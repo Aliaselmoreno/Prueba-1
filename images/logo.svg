@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" role="img" aria-label="Logo Gimnàs Al-Moo-Kwan Sueca">
+  <circle cx="60" cy="60" r="56" fill="#101828"/>
+  <g transform="rotate(-30 60 60)">
+    <path d="M14 60a46 46 0 0 1 92 0 23 23 0 0 1-46 0 23 23 0 0 0-46 0Z" fill="#cd2e3a"/>
+    <path d="M106 60a46 46 0 0 1-92 0 23 23 0 0 0 46 0 23 23 0 0 1 46 0Z" fill="#0f64cd"/>
+  </g>
+  <circle cx="60" cy="60" r="56" fill="none" stroke="#ffffff" stroke-opacity="0.85" stroke-width="4"/>
+</svg>

@@ -1,75 +1,68 @@
-document.getElementById('year').textContent = new Date().getFullYear();
+// Gimnàs Al-Moo-Kwan Sueca — interacciones básicas
 
-// Mobile nav toggle
-const navToggle = document.getElementById('navToggle');
-const nav = document.getElementById('nav');
+document.addEventListener('DOMContentLoaded', () => {
 
-navToggle.addEventListener('click', () => {
-  const isOpen = nav.classList.toggle('is-open');
-  navToggle.setAttribute('aria-expanded', String(isOpen));
-});
+  // Año actual en el pie de página
+  const year = document.getElementById('year');
+  if (year) year.textContent = new Date().getFullYear();
 
-nav.querySelectorAll('a').forEach((link) => {
-  link.addEventListener('click', () => {
-    nav.classList.remove('is-open');
-    navToggle.setAttribute('aria-expanded', 'false');
-  });
-});
-
-// Header shadow on scroll
-const header = document.getElementById('header');
-window.addEventListener('scroll', () => {
-  header.style.boxShadow = window.scrollY > 10 ? '0 4px 20px rgba(15,23,42,0.08)' : 'none';
-});
-
-// Nosotros tabs
-const tabButtons = document.querySelectorAll('.tab-btn');
-const tabPanels = document.querySelectorAll('.tab-panel');
-
-tabButtons.forEach((btn) => {
-  btn.addEventListener('click', () => {
-    tabButtons.forEach((b) => {
-      b.classList.remove('is-active');
-      b.setAttribute('aria-selected', 'false');
+  // Menú de navegación en móvil
+  const toggle = document.querySelector('.nav-toggle');
+  const nav = document.querySelector('.site-nav');
+  if (toggle && nav) {
+    toggle.addEventListener('click', () => {
+      const open = nav.classList.toggle('open');
+      toggle.classList.toggle('open', open);
+      toggle.setAttribute('aria-expanded', String(open));
     });
-    tabPanels.forEach((panel) => panel.classList.remove('is-active'));
+    nav.querySelectorAll('a').forEach((link) => {
+      link.addEventListener('click', () => {
+        nav.classList.remove('open');
+        toggle.classList.remove('open');
+        toggle.setAttribute('aria-expanded', 'false');
+      });
+    });
+  }
 
-    btn.classList.add('is-active');
-    btn.setAttribute('aria-selected', 'true');
-    document.getElementById(`tab-${btn.dataset.tab}`).classList.add('is-active');
+  // Slider del tour (portada)
+  document.querySelectorAll('.slider').forEach((slider) => {
+    const slides = Array.from(slider.querySelectorAll('.slide'));
+    if (slides.length === 0) return;
+
+    const dotsWrap = slider.querySelector('.slider-dots');
+    const interval = parseInt(slider.dataset.autoplay, 10) || 5000;
+    let current = slides.findIndex((s) => s.classList.contains('is-active'));
+    if (current < 0) current = 0;
+    let timer = null;
+
+    const dots = slides.map((_, i) => {
+      const dot = document.createElement('button');
+      dot.setAttribute('aria-label', 'Ir a la imagen ' + (i + 1));
+      dot.addEventListener('click', () => { goTo(i); restart(); });
+      dotsWrap.appendChild(dot);
+      return dot;
+    });
+
+    function goTo(index) {
+      slides[current].classList.remove('is-active');
+      dots[current].classList.remove('is-active');
+      current = (index + slides.length) % slides.length;
+      slides[current].classList.add('is-active');
+      dots[current].classList.add('is-active');
+    }
+
+    function restart() {
+      clearInterval(timer);
+      timer = setInterval(() => goTo(current + 1), interval);
+    }
+
+    slider.querySelector('.prev').addEventListener('click', () => { goTo(current - 1); restart(); });
+    slider.querySelector('.next').addEventListener('click', () => { goTo(current + 1); restart(); });
+    slider.addEventListener('mouseenter', () => clearInterval(timer));
+    slider.addEventListener('mouseleave', restart);
+
+    dots[current].classList.add('is-active');
+    restart();
   });
-});
 
-// Contact form -> sends the request straight to WhatsApp with a prefilled message.
-// Routed to the business WhatsApp for empresa/vehículo services, particulares otherwise.
-const WHATSAPP_PARTICULARES = '34635421689';
-const WHATSAPP_EMPRESAS = '34611892866';
-const EMPRESA_SERVICIOS = ['empresa', 'vehiculo'];
-
-const form = document.getElementById('contactForm');
-const status = document.getElementById('formStatus');
-
-form.addEventListener('submit', (event) => {
-  event.preventDefault();
-
-  const data = new FormData(form);
-  const nombre = data.get('nombre');
-  const telefono = data.get('telefono');
-  const email = data.get('email');
-  const servicio = data.get('servicio');
-  const mensaje = data.get('mensaje');
-
-  const whatsappNumber = EMPRESA_SERVICIOS.includes(servicio) ? WHATSAPP_EMPRESAS : WHATSAPP_PARTICULARES;
-
-  const text =
-    `Hola Limpieza Tapicerías Salva, soy ${nombre}.%0A` +
-    `Teléfono: ${telefono}%0A` +
-    `Email: ${email}%0A` +
-    `Servicio: ${servicio}%0A` +
-    `Mensaje: ${mensaje || '-'}`;
-
-  window.open(`https://wa.me/${whatsappNumber}?text=${text}`, '_blank');
-
-  status.textContent = 'Te hemos redirigido a WhatsApp para confirmar tu solicitud.';
-  form.reset();
 });
