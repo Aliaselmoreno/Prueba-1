@@ -11,24 +11,14 @@ Página web estática del gimnasio: no necesita servidor ni instalación, basta 
 | `horarios-y-precios.html` | Bonos, precios y horario de oficina |
 | `preguntas-frecuentes-faq.html` | Preguntas Frecuentes (FAQ) |
 
-## Cómo poner las fotos reales
+## Fotos
 
-Las imágenes actuales son **marcadores de posición** (archivos SVG). Para usar las fotos reales del gimnasio, sustituye cada archivo por la foto correspondiente:
+Todas las secciones usan ya fotos reales del gimnasio:
 
-**Portada (tour):** carpeta `images/tour/`
+- **Portada (tour):** `images/tour/` — sala de taekwondo, sala de actividades, musculación (2 vistas), spinning y cardio.
+- **Actividades:** `images/actividades/` — yoga, crosstraining, taekwondo, aeróbic, spinning, musculación, kickboxing y pilates.
 
-- `sala-taekwondo-1.svg` → foto de la sala de taekwondo (suelo azul, banderas)
-- `sala-taekwondo-2.svg` → segunda foto de la sala de taekwondo
-- `sala-actividades.svg` → sala con fitballs
-- `tatami.svg` → sala con tatami
-- `sala-musculacion.svg` → sala de musculación
-
-**Actividades:** carpeta `images/actividades/`
-
-- ✅ Ya con foto real: `yoga.jpg`, `taekwondo.jpg`, `aerobic.jpg`, `spinning.jpg`, `musculacion.jpg`, `kickboxing.jpg`, `pilates.jpg`
-- Pendiente: `crosstraining.svg` → sustituir por la foto real (la subida era un duplicado de la de yoga)
-
-> Consejo: si las fotos son `.jpg`, lo más sencillo es cambiar la extensión en los `src="images/..."` de los HTML (por ejemplo `images/tour/sala-taekwondo-1.jpg`). Las fotos se recortan automáticamente al hueco (formato 16:9 recomendado).
+Para cambiar una foto basta con sustituir el archivo correspondiente por otro con el mismo nombre (formato 16:9 recomendado; se recorta automáticamente al hueco).
 
 ## Datos de contacto usados
 
