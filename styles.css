@@ -359,6 +359,23 @@ a { color: var(--blue); }
 .activity-body ul { padding-left: 1.2rem; }
 .activity-body li + li { margin-top: 0.35rem; }
 
+.video-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 1rem;
+  padding: 0.5rem 1.1rem;
+  border-radius: 999px;
+  background: var(--red);
+  color: var(--white);
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 0.95rem;
+  transition: background 0.15s ease, transform 0.15s ease;
+}
+.video-link:hover { background: var(--red-dark); transform: translateY(-2px); }
+.video-link svg { width: 22px; height: 22px; }
+
 /* ---------- Banda CTA ---------- */
 .cta-band {
   background: var(--navy);
