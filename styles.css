@@ -90,7 +90,13 @@ a { color: var(--blue); }
   text-decoration: none;
   color: var(--white);
 }
-.brand-logo { width: 44px; height: 44px; }
+.brand-logo {
+  height: 46px;
+  width: auto;
+  background: var(--white);
+  border-radius: 10px;
+  padding: 4px 9px;
+}
 .brand-name {
   font-family: var(--font-display);
   font-size: 1.35rem;
