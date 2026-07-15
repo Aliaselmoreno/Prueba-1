@@ -1,75 +1,79 @@
+// Año actual en el footer
 document.getElementById('year').textContent = new Date().getFullYear();
 
-// Mobile nav toggle
+// Navegación móvil
 const navToggle = document.getElementById('navToggle');
 const nav = document.getElementById('nav');
 
 navToggle.addEventListener('click', () => {
-  const isOpen = nav.classList.toggle('is-open');
-  navToggle.setAttribute('aria-expanded', String(isOpen));
+  const open = nav.classList.toggle('open');
+  navToggle.classList.toggle('active', open);
+  navToggle.setAttribute('aria-expanded', String(open));
 });
 
-nav.querySelectorAll('a').forEach((link) => {
+// Cerrar menú al pulsar un enlace
+nav.querySelectorAll('a').forEach(link => {
   link.addEventListener('click', () => {
-    nav.classList.remove('is-open');
+    nav.classList.remove('open');
+    navToggle.classList.remove('active');
     navToggle.setAttribute('aria-expanded', 'false');
   });
 });
 
-// Header shadow on scroll
+// Sombra en el header al hacer scroll
 const header = document.getElementById('header');
-window.addEventListener('scroll', () => {
-  header.style.boxShadow = window.scrollY > 10 ? '0 4px 20px rgba(15,23,42,0.08)' : 'none';
-});
+const onScroll = () => header.classList.toggle('scrolled', window.scrollY > 8);
+onScroll();
+window.addEventListener('scroll', onScroll, { passive: true });
 
-// Nosotros tabs
-const tabButtons = document.querySelectorAll('.tab-btn');
-const tabPanels = document.querySelectorAll('.tab-panel');
+// Animación de aparición al hacer scroll
+const revealEls = document.querySelectorAll(
+  '.card, .step, .zone, .quote, .about__media, .about__content, .section__head, .contact__info, .contact__form, .trust__item'
+);
+revealEls.forEach(el => el.classList.add('reveal'));
 
-tabButtons.forEach((btn) => {
-  btn.addEventListener('click', () => {
-    tabButtons.forEach((b) => {
-      b.classList.remove('is-active');
-      b.setAttribute('aria-selected', 'false');
+if ('IntersectionObserver' in window) {
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        observer.unobserve(entry.target);
+      }
     });
-    tabPanels.forEach((panel) => panel.classList.remove('is-active'));
+  }, { threshold: 0.12 });
+  revealEls.forEach(el => observer.observe(el));
+} else {
+  revealEls.forEach(el => el.classList.add('visible'));
+}
 
-    btn.classList.add('is-active');
-    btn.setAttribute('aria-selected', 'true');
-    document.getElementById(`tab-${btn.dataset.tab}`).classList.add('is-active');
-  });
-});
-
-// Contact form -> sends the request straight to WhatsApp with a prefilled message.
-// Routed to the business WhatsApp for empresa/vehículo services, particulares otherwise.
-const WHATSAPP_PARTICULARES = '34635421689';
-const WHATSAPP_EMPRESAS = '34611892866';
-const EMPRESA_SERVICIOS = ['empresa', 'vehiculo'];
-
+// Formulario de contacto
 const form = document.getElementById('contactForm');
-const status = document.getElementById('formStatus');
+const note = document.getElementById('formNote');
 
-form.addEventListener('submit', (event) => {
-  event.preventDefault();
+form.addEventListener('submit', (e) => {
+  e.preventDefault();
+  const name = form.name.value.trim();
+  const email = form.email.value.trim();
+  const emailOk = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 
-  const data = new FormData(form);
-  const nombre = data.get('nombre');
-  const telefono = data.get('telefono');
-  const email = data.get('email');
-  const servicio = data.get('servicio');
-  const mensaje = data.get('mensaje');
+  if (!name || !emailOk) {
+    note.textContent = 'Por favor, indica tu nombre y un email válido.';
+    note.className = 'form__note error';
+    return;
+  }
 
-  const whatsappNumber = EMPRESA_SERVICIOS.includes(servicio) ? WHATSAPP_EMPRESAS : WHATSAPP_PARTICULARES;
+  // Envío por WhatsApp con los datos del formulario
+  const goal = form.goal.value ? `\nObjetivo: ${form.goal.value}` : '';
+  const phone = form.phone.value.trim() ? `\nTeléfono: ${form.phone.value.trim()}` : '';
+  const msg = form.message.value.trim() ? `\nMensaje: ${form.message.value.trim()}` : '';
+  const text = encodeURIComponent(
+    `¡Hola Dietofit! Soy ${name}.\nEmail: ${email}${phone}${goal}${msg}`
+  );
 
-  const text =
-    `Hola Limpieza Tapicerías Salva, soy ${nombre}.%0A` +
-    `Teléfono: ${telefono}%0A` +
-    `Email: ${email}%0A` +
-    `Servicio: ${servicio}%0A` +
-    `Mensaje: ${mensaje || '-'}`;
-
-  window.open(`https://wa.me/${whatsappNumber}?text=${text}`, '_blank');
-
-  status.textContent = 'Te hemos redirigido a WhatsApp para confirmar tu solicitud.';
-  form.reset();
+  note.textContent = '¡Gracias! Te redirijo a WhatsApp para completar el envío...';
+  note.className = 'form__note success';
+  setTimeout(() => {
+    window.open(`https://wa.me/34691650475?text=${text}`, '_blank');
+    form.reset();
+  }, 900);
 });
