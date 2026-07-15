@@ -287,6 +287,18 @@ h1, h2, h3 { font-family: var(--font-head); color: var(--ink); line-height: 1.15
 .cta p { font-size: 1.14rem; max-width: 560px; margin: 0 auto 30px; opacity: .95; }
 .cta__actions { display: flex; flex-wrap: wrap; gap: 14px; justify-content: center; }
 
+/* ---------- Instagram follow ---------- */
+.ig-follow {
+  background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%);
+  color: #fff; text-align: center;
+}
+.ig-follow__inner { padding: 72px 24px; display: flex; flex-direction: column; align-items: center; }
+.ig-follow__icon { margin-bottom: 10px; opacity: .95; }
+.ig-follow h2 { color: #fff; font-size: clamp(1.8rem, 4vw, 2.5rem); font-weight: 800; margin-bottom: 12px; }
+.ig-follow p { max-width: 540px; margin: 0 auto 28px; font-size: 1.1rem; opacity: .96; }
+.ig-follow__btn { background: #fff; color: #c1288b; font-weight: 700; padding: 15px 32px; }
+.ig-follow__btn:hover { transform: translateY(-2px); box-shadow: 0 14px 30px rgba(0, 0, 0, .18); }
+
 /* ---------- Contact ---------- */
 .contact { display: grid; grid-template-columns: 1fr 1.1fr; gap: 56px; align-items: start; }
 .contact__info h2 { font-size: clamp(1.8rem, 3.6vw, 2.4rem); margin-bottom: 14px; }
