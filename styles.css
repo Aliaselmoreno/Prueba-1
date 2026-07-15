@@ -113,7 +113,16 @@ h1, h2, h3 { font-family: var(--font-head); color: var(--ink); line-height: 1.15
 }
 .nav a:hover { color: var(--green-dark); background: var(--green-light); }
 
+.header__actions { display: flex; align-items: center; gap: 12px; flex-shrink: 0; }
 .header__cta { flex-shrink: 0; }
+.header__ig {
+  width: 42px; height: 42px; border-radius: 12px; flex-shrink: 0;
+  display: inline-flex; align-items: center; justify-content: center; color: #fff;
+  background: radial-gradient(circle at 30% 107%, #fdf497 0%, #fdf497 5%, #fd5949 45%, #d6249f 60%, #285AEB 90%);
+  box-shadow: 0 6px 16px rgba(214, 36, 159, .35);
+  transition: transform .18s ease, box-shadow .18s ease;
+}
+.header__ig:hover { transform: translateY(-2px); box-shadow: 0 10px 22px rgba(214, 36, 159, .45); }
 
 .nav-toggle { display: none; flex-direction: column; gap: 5px; background: none; border: 0; cursor: pointer; padding: 8px; }
 .nav-toggle span { width: 26px; height: 2.5px; background: var(--ink); border-radius: 3px; transition: .25s; }
