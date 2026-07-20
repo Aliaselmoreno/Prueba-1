@@ -1,0 +1,166 @@
+{
+    "name": "Retell AI -> Telegram (call_ended) [HTTP module]",
+    "flow": [
+        {
+            "id": 1,
+            "module": "gateway:CustomWebHook",
+            "version": 1,
+            "parameters": {
+                "hook": 1000001,
+                "maxResults": 1
+            },
+            "mapper": {},
+            "metadata": {
+                "designer": { "x": 0, "y": 0, "name": "Retell AI Webhook" },
+                "restore": {
+                    "parameters": {
+                        "hook": { "label": "Retell AI Webhook", "data": { "editable": "true" } }
+                    }
+                },
+                "parameters": [
+                    { "name": "hook", "type": "hook:gateway-webhook", "label": "Webhook", "required": true },
+                    { "name": "maxResults", "type": "number", "label": "Maximum number of results" }
+                ],
+                "interface": [
+                    { "name": "event", "type": "text", "label": "event" },
+                    {
+                        "name": "call",
+                        "type": "collection",
+                        "label": "call",
+                        "spec": [
+                            { "name": "call_id", "type": "text", "label": "call_id" },
+                            { "name": "agent_id", "type": "text", "label": "agent_id" },
+                            { "name": "call_status", "type": "text", "label": "call_status" },
+                            { "name": "direction", "type": "text", "label": "direction" },
+                            { "name": "from_number", "type": "text", "label": "from_number" },
+                            { "name": "to_number", "type": "text", "label": "to_number" },
+                            { "name": "duration_ms", "type": "number", "label": "duration_ms" },
+                            { "name": "disconnection_reason", "type": "text", "label": "disconnection_reason" },
+                            { "name": "transcript", "type": "text", "label": "transcript" },
+                            { "name": "recording_url", "type": "text", "label": "recording_url" }
+                        ]
+                    }
+                ]
+            }
+        },
+        {
+            "id": 2,
+            "module": "gateway:WebhookRespond",
+            "version": 1,
+            "parameters": {},
+            "mapper": { "status": "200", "body": "OK", "headers": [] },
+            "metadata": {
+                "designer": { "x": 300, "y": 0, "name": "Responder 200 a Retell" },
+                "restore": { "parameters": { "headers": { "mode": "chose" } } },
+                "parameters": [],
+                "expect": [
+                    { "name": "status", "type": "uinteger", "label": "Status", "required": true, "validate": { "min": 100 } },
+                    { "name": "body", "type": "any", "label": "Body" },
+                    {
+                        "name": "headers", "type": "array", "label": "Custom headers",
+                        "spec": [
+                            { "name": "key", "type": "text", "label": "Key" },
+                            { "name": "value", "type": "text", "label": "Value" }
+                        ]
+                    }
+                ]
+            }
+        },
+        {
+            "id": 3,
+            "module": "http:ActionSendData",
+            "version": 3,
+            "parameters": {
+                "handleErrors": false,
+                "useNewZLibDeFlate": true
+            },
+            "filter": {
+                "name": "Solo call_ended",
+                "conditions": [
+                    [ { "a": "{{1.event}}", "b": "call_ended", "o": "text:equal" } ]
+                ]
+            },
+            "mapper": {
+                "url": "https://api.telegram.org/bot<TOKEN_DE_TU_BOT>/sendMessage",
+                "serializeUrl": false,
+                "method": "post",
+                "headers": [],
+                "qs": [],
+                "bodyType": "x_www_form_urlencoded",
+                "parseResponse": true,
+                "authUser": "",
+                "authPass": "",
+                "timeout": "",
+                "shareCookies": false,
+                "ca": "",
+                "rejectUnauthorized": true,
+                "followRedirect": true,
+                "useQuerystring": false,
+                "gzip": true,
+                "useMtls": false,
+                "contentType": "application/x-www-form-urlencoded",
+                "data": "",
+                "fields": [
+                    { "name": "chat_id", "value": "PON_AQUI_TU_CHAT_ID" },
+                    { "name": "text", "value": "📞 Llamada finalizada (Retell AI)\n\nCall ID: {{1.call.call_id}}\nAgente: {{1.call.agent_id}}\nDireccion: {{1.call.direction}}\nDe: {{1.call.from_number}}\nA: {{1.call.to_number}}\nEstado: {{1.call.call_status}}\nMotivo desconexion: {{1.call.disconnection_reason}}\nDuracion (s): {{round(1.call.duration_ms / 1000)}}\n\n📝 Transcripcion:\n{{substring(1.call.transcript; 0; 3500)}}" },
+                    { "name": "disable_web_page_preview", "value": "true" }
+                ]
+            },
+            "metadata": {
+                "designer": { "x": 600, "y": 0, "name": "Telegram sendMessage (HTTP)" },
+                "restore": {
+                    "expect": {
+                        "method": { "mode": "chose", "label": "POST" },
+                        "bodyType": { "label": "Application/x-www-form-urlencoded" },
+                        "qs": { "mode": "chose" },
+                        "headers": { "mode": "chose" }
+                    }
+                },
+                "parameters": [
+                    { "name": "handleErrors", "type": "boolean", "label": "Evaluate all states as errors (except for 2xx and 3xx )" },
+                    { "name": "useNewZLibDeFlate", "type": "boolean", "label": "Use Mozilla's decompression algorithm" }
+                ],
+                "expect": [
+                    { "name": "url", "type": "url", "label": "URL", "required": true },
+                    { "name": "serializeUrl", "type": "boolean", "label": "Serialize URL" },
+                    { "name": "method", "type": "select", "label": "Method", "required": true },
+                    {
+                        "name": "headers", "type": "array", "label": "Headers",
+                        "spec": [
+                            { "name": "name", "type": "text", "label": "Name" },
+                            { "name": "value", "type": "text", "label": "Value" }
+                        ]
+                    },
+                    {
+                        "name": "qs", "type": "array", "label": "Query String",
+                        "spec": [
+                            { "name": "name", "type": "text", "label": "Name" },
+                            { "name": "value", "type": "text", "label": "Value" }
+                        ]
+                    },
+                    { "name": "bodyType", "type": "select", "label": "Body type" },
+                    { "name": "parseResponse", "type": "boolean", "label": "Parse response" }
+                ]
+            }
+        }
+    ],
+    "metadata": {
+        "instant": true,
+        "version": 1,
+        "scenario": {
+            "roundtrips": 1,
+            "maxErrors": 3,
+            "autoCommit": true,
+            "autoCommitTriggerLast": true,
+            "sequential": false,
+            "slots": null,
+            "confidential": false,
+            "dataloss": false,
+            "dlq": false,
+            "freshVariables": false
+        },
+        "designer": { "orphans": [] },
+        "zone": "eu2.make.com",
+        "notes": []
+    }
+}

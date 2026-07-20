@@ -17,7 +17,11 @@ Retell AI ──(POST call_ended)──► Make (Custom Webhook) ──► Webho
 
 ## Contenido
 
-- `retell-to-telegram.blueprint.json` — Blueprint importable en Make.
+- `retell-to-telegram.blueprint.json` — Blueprint con el **módulo nativo de Telegram**
+  (recomendado; la conexión guarda el token del bot).
+- `retell-to-telegram-http.blueprint.json` — Misma lógica pero con el **módulo HTTP**
+  (`HTTP → Make a request`) llamando directamente a la API de Telegram. Úsalo si
+  prefieres no crear la conexión de Telegram en Make.
 
 ---
 
@@ -78,6 +82,32 @@ Retell AI ──(POST call_ended)──► Make (Custom Webhook) ──► Webho
 
 - Pon el escenario en **ON** (scheduling). Al ser un webhook *instant*, se ejecuta en
   cuanto Retell envía el evento.
+
+---
+
+## Opción B — Enviar con el módulo HTTP (la "API" que te pide Make)
+
+Si en vez del módulo de Telegram usas **HTTP → Make a request**, lo que Make llama
+"API"/URL es el endpoint de la **API de Telegram**:
+
+- **URL:** `https://api.telegram.org/bot<TOKEN_DE_TU_BOT>/sendMessage`
+  (la palabra `bot` va pegada al token, p. ej. `.../bot123456789:AAE.../sendMessage`)
+- **Method:** `POST`
+- **Body type:** `Application/x-www-form-urlencoded` (evita errores de parseo con la
+  transcripción)
+- **Fields:**
+  | key | value |
+  |---|---|
+  | `chat_id` | tu chat ID |
+  | `text` | el mensaje con `{{1.call.transcript}}`, `{{1.call.from_number}}`, etc. |
+  | `disable_web_page_preview` | `true` |
+- **Parse response:** Yes
+
+> No hace falta cabecera de autenticación: el token va dentro de la propia URL. No uses
+> `Authorization`. Trata el token como secreto (no lo publiques).
+
+El archivo `retell-to-telegram-http.blueprint.json` ya trae este módulo montado; solo
+sustituye `<TOKEN_DE_TU_BOT>` en la URL y `PON_AQUI_TU_CHAT_ID` en el campo `chat_id`.
 
 ---
 
