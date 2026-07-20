@@ -5,8 +5,15 @@ una llamada termina (`call_ended`) y envía la **transcripción completa** y los
 básicos de la llamada a un chat de **Telegram**.
 
 ```
-Retell AI  ──(webhook call_ended)──►  Make (Custom Webhook)  ──►  Filtro event=call_ended  ──►  Telegram (Send a Message)
+Retell AI ──(POST call_ended)──► Make (Custom Webhook) ──► Webhook Response 200 ──► Filtro event=call_ended ──► Telegram (Send a Message)
 ```
+
+> **Requisito HTTP de Retell:** el webhook es un `POST` y **el endpoint debe responder
+> `HTTP 200` de inmediato**. Si no responde 200 (o tarda demasiado porque primero
+> ejecuta Telegram), Retell da el webhook por fallido y reintenta → "no funciona".
+> Por eso el flujo incluye un módulo **Webhook Response (200)** justo después de
+> recibir el evento, para acusar recibo a Retell al instante y enviar el mensaje a
+> Telegram después.
 
 ## Contenido
 
@@ -34,7 +41,8 @@ Retell AI  ──(webhook call_ended)──►  Make (Custom Webhook)  ──►
 1. Make → **Scenarios** → **Create a new scenario**.
 2. Menú `···` (abajo o arriba a la derecha) → **Import Blueprint**.
 3. Sube `retell-to-telegram.blueprint.json`.
-4. Verás dos módulos: **Custom webhook** y **Telegram → Send a Text Message or Reply**.
+4. Verás tres módulos: **Custom webhook**, **Webhook response (200)** y
+   **Telegram → Send a Text Message or Reply**.
 
 ---
 
@@ -105,6 +113,41 @@ El filtro **`Solo call_ended`** garantiza que otros eventos de Retell
   `HTML`/`Markdown`, los caracteres especiales de la transcripción (`<`, `>`, `_`,
   `*`) pueden romper el envío con el error *"can't parse entities"*.
 - **Seguridad (opcional):** puedes validar la firma del webhook de Retell añadiendo
-  un módulo previo que verifique la cabecera `X-Retell-Signature` antes del envío.
+  un módulo previo que verifique la cabecera `x-retell-signature` (HMAC SHA256 de la
+  API key) antes del envío.
 - **Zona:** si al importar aparece un aviso de zona, ábrelo desde la zona correcta de
   tu cuenta de Make; el flujo es idéntico.
+
+---
+
+## Troubleshooting HTTP ("no me llega nada")
+
+1. **Retell dice que el webhook falla / no llega a Telegram.**
+   Casi siempre es porque el endpoint no devolvió `200` a tiempo. Verifica que el
+   módulo **Webhook Response** está presente y que su *Status* es `200`. Es lo primero
+   que se ejecuta tras recibir el evento.
+
+2. **El escenario tiene que estar en ON.** Un Custom Webhook solo procesa datos si el
+   scheduling del escenario está activado. Con OFF, Make encola pero no ejecuta.
+
+3. **Comprobar qué envía Retell realmente.** En Make abre el módulo webhook →
+   **Redetermine data structure** → *Run once* y lanza una llamada real. Mira el
+   *bundle* recibido: debe tener `event` y `call`. Si los campos van en otra ruta
+   (p. ej. `data` en lugar de `call`), ajusta los mapeos `{{1.call.X}}`.
+
+4. **Probar el endpoint a mano.** Puedes simular a Retell con curl contra la URL del
+   webhook de Make y confirmar que responde `200`:
+
+   ```bash
+   curl -i -X POST "https://hook.eu2.make.com/TU_HOOK" \
+     -H "Content-Type: application/json" \
+     -d '{"event":"call_ended","call":{"call_id":"test_123","agent_id":"ag_1","direction":"inbound","from_number":"+34600000000","to_number":"+34911111111","call_status":"ended","disconnection_reason":"user_hangup","duration_ms":42000,"transcript":"Agent: Hola\nUser: Hola, gracias"}}'
+   ```
+
+   Debes recibir `HTTP/1.1 200` y, con el escenario en ON, un mensaje en Telegram.
+
+5. **URL/zona correcta.** La URL del webhook debe ser la que genera *tu* cuenta de
+   Make (`hook.eu2…`, `hook.us1…`, etc.). Si copiaste la del ejemplo, no funcionará.
+
+6. **Mensaje vacío en Telegram.** Si llega el mensaje pero sin transcripción, es que
+   la estructura de datos no estaba registrada al mapear: repite el paso 3.
