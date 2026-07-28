@@ -157,12 +157,12 @@ img { max-width: 100%; display: block; }
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 42px;
-  height: 42px;
-  font-size: 1.4rem;
-  border-radius: 50%;
-  background: var(--gradient-brand);
+  width: 34px;
+  height: 38px;
+  flex-shrink: 0;
 }
+
+.tooth-icon { width: 100%; height: 100%; }
 
 .logo__text {
   display: flex;
@@ -541,10 +541,12 @@ img { max-width: 100%; display: block; }
   width: 80px;
   height: 80px;
   flex-shrink: 0;
-  font-size: 2rem;
   border-radius: 50%;
-  background: var(--gradient-brand);
+  background: var(--color-bg-alt);
+  box-shadow: inset 0 0 0 1px var(--color-border);
 }
+
+.ig-profile__avatar .tooth-icon { width: 42px; height: 47px; }
 
 .ig-profile__info { flex: 1; min-width: 200px; }
 
@@ -687,11 +689,15 @@ img { max-width: 100%; display: block; }
 
 .footer__logo-badge {
   display: inline-flex;
+  align-items: center;
+  justify-content: center;
   width: fit-content;
   background: #fff;
   border-radius: 12px;
-  padding: 10px 16px;
+  padding: 8px 14px;
 }
+
+.footer__logo-badge .tooth-icon { width: 30px; height: 34px; }
 
 .footer__brand p { color: #94a3b8; font-size: 0.9rem; max-width: 280px; }
 
