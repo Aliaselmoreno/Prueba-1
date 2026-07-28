@@ -288,7 +288,14 @@ img { max-width: 100%; display: block; }
   font-size: 0.75rem;
 }
 
-.hero__card-icon { font-size: 1.6rem; }
+.hero__card-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 34px;
+  flex-shrink: 0;
+}
 
 .hero__card--1 { top: 12%; left: -4%; }
 .hero__card--2 { bottom: 10%; right: -2%; }
