@@ -147,10 +147,31 @@ img { max-width: 100%; display: block; }
 .logo {
   display: flex;
   align-items: center;
+  gap: 10px;
   margin-right: auto;
 }
 
 .logo__img { height: 42px; width: auto; }
+
+.logo__badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 42px;
+  height: 42px;
+  font-size: 1.4rem;
+  border-radius: 50%;
+  background: var(--gradient-brand);
+}
+
+.logo__text {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.2;
+}
+
+.logo__text strong { color: var(--color-ink); font-size: 1rem; }
+.logo__text small { color: var(--color-muted); font-size: 0.72rem; }
 
 .nav {
   display: flex;
@@ -280,7 +301,7 @@ img { max-width: 100%; display: block; }
 
 .stats__inner {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(3, 1fr);
   gap: 24px;
   text-align: center;
   color: #fff;
@@ -302,7 +323,7 @@ img { max-width: 100%; display: block; }
 
 .services__grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
   gap: 28px;
 }
 
@@ -496,49 +517,85 @@ img { max-width: 100%; display: block; }
 .value-card h3 { font-size: 1.1rem; }
 .value-card p { color: var(--color-muted); margin: 0; }
 
-/* Testimonials */
-.testimonials { padding: 90px 0; }
+/* Social (Instagram + cuentas aliadas) */
+.social { padding: 90px 0; }
 
-.testimonials__grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 28px;
-}
-
-.testimonial {
-  background: #fff;
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-md);
-  padding: 28px;
-  margin: 0;
-}
-
-.testimonial blockquote {
-  margin: 0 0 20px;
-  font-style: italic;
-  color: var(--color-ink);
-}
-
-.testimonial figcaption {
+.ig-profile {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 28px;
+  flex-wrap: wrap;
+  background: #fff;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  padding: 32px;
+  box-shadow: var(--shadow-md);
+  max-width: 760px;
+  margin: 0 auto;
 }
 
-.avatar {
-  width: 42px;
-  height: 42px;
-  border-radius: 50%;
-  background: var(--gradient-brand);
-  color: #fff;
+.ig-profile__avatar {
   display: flex;
   align-items: center;
   justify-content: center;
-  font-weight: 700;
-  font-size: 0.85rem;
+  width: 80px;
+  height: 80px;
+  flex-shrink: 0;
+  font-size: 2rem;
+  border-radius: 50%;
+  background: var(--gradient-brand);
 }
 
-.testimonial small { color: var(--color-muted); }
+.ig-profile__info { flex: 1; min-width: 200px; }
+
+.ig-profile__info strong { display: block; color: var(--color-ink); font-size: 1.1rem; margin-bottom: 4px; }
+.ig-profile__info p { margin-bottom: 12px; }
+
+.ig-profile__stats {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+  font-size: 0.9rem;
+  color: var(--color-muted);
+}
+
+.ig-profile__stats strong { color: var(--color-ink); }
+
+.allies__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 24px;
+  max-width: 760px;
+  margin: 32px auto 0;
+}
+
+.allies__card {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  background: #fff;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  padding: 22px;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.allies__card:hover { transform: translateY(-3px); box-shadow: var(--shadow-md); }
+
+.allies__icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  flex-shrink: 0;
+  font-size: 1.4rem;
+  border-radius: 50%;
+  background: var(--gradient-warm);
+}
+
+.allies__card strong { display: block; color: var(--color-ink); }
+.allies__card small { color: var(--color-muted); }
 
 /* Contact */
 .contact { padding: 90px 0; background: var(--color-bg-alt); }
@@ -693,7 +750,7 @@ img { max-width: 100%; display: block; }
 @media (max-width: 960px) {
   .hero__inner, .about__inner, .contact__inner { grid-template-columns: 1fr; }
   .hero__visual { height: 280px; order: -1; }
-  .services__grid, .testimonials__grid, .values__grid { grid-template-columns: repeat(2, 1fr); }
+  .values__grid { grid-template-columns: repeat(2, 1fr); }
   .footer__inner { grid-template-columns: 1fr 1fr; }
 }
 
@@ -714,8 +771,9 @@ img { max-width: 100%; display: block; }
   .nav.is-open { display: flex; }
   .nav-toggle { display: flex; }
   .header__cta { display: none; }
-  .stats__inner { grid-template-columns: repeat(2, 1fr); }
-  .services__grid, .testimonials__grid, .values__grid { grid-template-columns: 1fr; }
+  .stats__inner { grid-template-columns: 1fr; }
+  .values__grid { grid-template-columns: 1fr; }
+  .ig-profile { flex-direction: column; text-align: center; }
   .tabs { gap: 8px; }
   .tab-btn { padding: 10px 16px; font-size: 0.85rem; }
   .form-row { grid-template-columns: 1fr; }

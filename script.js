@@ -41,10 +41,7 @@ tabButtons.forEach((btn) => {
 });
 
 // Contact form -> sends the request straight to WhatsApp with a prefilled message.
-// Routed to the business WhatsApp for empresa/vehículo services, particulares otherwise.
-const WHATSAPP_PARTICULARES = '34635421689';
-const WHATSAPP_EMPRESAS = '34611892866';
-const EMPRESA_SERVICIOS = ['empresa', 'vehiculo'];
+const WHATSAPP_NUMBER = '34645578673';
 
 const form = document.getElementById('contactForm');
 const status = document.getElementById('formStatus');
@@ -55,20 +52,16 @@ form.addEventListener('submit', (event) => {
   const data = new FormData(form);
   const nombre = data.get('nombre');
   const telefono = data.get('telefono');
-  const email = data.get('email');
-  const servicio = data.get('servicio');
+  const tratamiento = data.get('tratamiento');
   const mensaje = data.get('mensaje');
 
-  const whatsappNumber = EMPRESA_SERVICIOS.includes(servicio) ? WHATSAPP_EMPRESAS : WHATSAPP_PARTICULARES;
-
   const text =
-    `Hola Limpieza Tapicerías Salva, soy ${nombre}.%0A` +
-    `Teléfono: ${telefono}%0A` +
-    `Email: ${email}%0A` +
-    `Servicio: ${servicio}%0A` +
+    `Hola Clínica Dental y Salud Estética Valencia, soy ${nombre}.\n` +
+    `Teléfono: ${telefono}\n` +
+    `Tratamiento: ${tratamiento}\n` +
     `Mensaje: ${mensaje || '-'}`;
 
-  window.open(`https://wa.me/${whatsappNumber}?text=${text}`, '_blank');
+  window.open(`https://api.whatsapp.com/send?phone=${WHATSAPP_NUMBER}&text=${encodeURIComponent(text)}`, '_blank');
 
   status.textContent = 'Te hemos redirigido a WhatsApp para confirmar tu solicitud.';
   form.reset();
