@@ -1,0 +1,23 @@
+{
+  "inputs": [
+    {
+      "type": "promptString",
+      "id": "n8n-api-key",
+      "description": "n8n API Key (Settings → n8n API → Create an API key en https://focuschamp.app.n8n.cloud)",
+      "password": true
+    }
+  ],
+  "servers": {
+    "n8n-mcp": {
+      "command": "npx",
+      "args": ["-y", "n8n-mcp"],
+      "env": {
+        "MCP_MODE": "stdio",
+        "N8N_API_URL": "https://focuschamp.app.n8n.cloud",
+        "N8N_API_KEY": "${input:n8n-api-key}",
+        "LOG_LEVEL": "error",
+        "DISABLE_CONSOLE_OUTPUT": "true"
+      }
+    }
+  }
+}
